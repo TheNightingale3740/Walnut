@@ -49,14 +49,14 @@ namespace Walnut::UI {
 		{
 			return theLinearValue <= 0.0031308f
 				? theLinearValue * 12.92f
-				: glm::pow<float>(theLinearValue, 1.0f / 2.2f) * 1.055f - 0.055f;
+				: std::pow(theLinearValue, 1.0f / 2.2f) * 1.055f - 0.055f;
 		}
 
 		inline float Convert_sRGB_ToLinear(float thesRGBValue)
 		{
 			return thesRGBValue <= 0.04045f
 				? thesRGBValue / 12.92f
-				: glm::pow<float>((thesRGBValue + 0.055f) / 1.055f, 2.2f);
+				: std::pow((thesRGBValue + 0.055f) / 1.055f, 2.2f);
 		}
 
 		inline ImVec4 ConvertFromSRGB(ImVec4 colour)
@@ -70,8 +70,8 @@ namespace Walnut::UI {
 		inline ImVec4 ConvertToSRGB(ImVec4 colour)
 		{
 			return ImVec4(std::pow(colour.x, 2.2f),
-				glm::pow<float>(colour.y, 2.2f),
-				glm::pow<float>(colour.z, 2.2f),
+				std::pow(colour.y, 2.2f),
+				std::pow(colour.z, 2.2f),
 				colour.w);
 		}
 

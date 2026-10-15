@@ -3,16 +3,15 @@ project "Walnut"
    language "C++"
    cppdialect "C++20"
    targetdir "bin/%{cfg.buildcfg}"
-   staticruntime "off"
 
    files
    {
-       "Source/**.h",
-       "Source/**.cpp",
+        "Source/**.h",
+        "Source/**.cpp",
 
-       "Platform/GUI/**.h",
-       "Platform/GUI/**.cpp",
-   }
+        "Platform/GUI/**.h",
+        "Platform/GUI/**.cpp",
+    }
 
    includedirs
    {
@@ -30,19 +29,36 @@ project "Walnut"
 
    links
    {
-       "ImGui",
-       "GLFW",
+        "ImGui",
+        "GLFW",
+        "spdlog",
 
-       "%{Library.Vulkan}",
+        "%{Library.Vulkan}",
    }
+
+   -- ApplicationGUI.cpp defines GLFW_INCLUDE_NONE before including glfw3.h; keep the
+   -- backends from pulling in Cocoa headers, which are not valid C++.
+   defines { "GLFW_INCLUDE_NONE", "GLFW_INCLUDE_VULKAN" }
+
+   buildoptions (FmtConstevalWorkaround)
 
    targetdir ("../../bin/" .. outputdir .. "/%{prj.name}")
    objdir ("../../bin-int/" .. outputdir .. "/%{prj.name}")
 
    filter "system:windows"
+      staticruntime "off"
       systemversion "latest"
       defines { "WL_PLATFORM_WINDOWS" }
       buildoptions { "/utf-8" }
+
+   filter "system:macosx"
+      pic "On"
+      defines { "WL_PLATFORM_MACOS" }
+      libdirs { VulkanPrefixMac .. "/lib" }
+      linkoptions (CoreLinkOptions)
+
+      linkoptions (MacOSFrameworkLinkOptions)
+      linkoptions { "-Wl,-rpath," .. VulkanPrefixMac .. "/lib" }
 
    filter "configurations:Debug"
       defines { "WL_DEBUG" }

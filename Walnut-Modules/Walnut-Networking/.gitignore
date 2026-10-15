@@ -1,0 +1,18 @@
+# Directories
+# Root-anchored on purpose: the vendored prebuilt GameNetworkingSockets binaries
+# live in vendor/GameNetworkingSockets/bin/ and are meant to be committed.
+/bin/
+/bin-int/
+/logs/
+/vendor/GameNetworkingSockets/build/
+
+# Files
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.sln
+
+# GNU make output (premake `gmake`)
+Makefile
+*.make
+Makefile.*

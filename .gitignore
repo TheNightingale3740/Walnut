@@ -2,6 +2,8 @@
 .vs/
 bin/
 bin-int/
+logs/
+.cache/
 
 # Files
 *.vcxproj
@@ -9,5 +11,21 @@ bin-int/
 *.vcxproj.filters
 *.sln
 
+# GNU make output (premake `gmake`, used for the macOS/Linux builds)
+Makefile
+*.make
+Makefile.*
+
+# Runtime output from the example app
+imgui.ini
+
+# Editor/IDE cruft
+.DS_Store
+compile_commands.json
+
 # Exclude
+# These live in directories named `bin`, which the rule above would otherwise
+# swallow, so each one has to be un-ignored by name.
 !vendor/bin
+!vendor/GameNetworkingSockets/bin
+!Walnut-Modules/Walnut-Networking/vendor/GameNetworkingSockets/bin

@@ -95,12 +95,25 @@ static void SetupVulkan(const char** extensions, uint32_t extensions_count)
 {
 	VkResult err;
 
+#ifdef WL_PLATFORM_MACOS
+	// MoltenVK is a portability driver: vkCreateInstance fails with
+	// VK_ERROR_INCOMPATIBLE_DRIVER unless the app opts into the portability subset.
+	const char** extensions_portability = (const char**)malloc(sizeof(const char*) * (extensions_count + 1));
+	memcpy(extensions_portability, extensions, extensions_count * sizeof(const char*));
+	extensions_portability[extensions_count] = VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME;
+	extensions = extensions_portability;
+	extensions_count += 1;
+#endif
+
 	// Create Vulkan Instance
 	{
 		VkInstanceCreateInfo create_info = {};
 		create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		create_info.enabledExtensionCount = extensions_count;
 		create_info.ppEnabledExtensionNames = extensions;
+#ifdef WL_PLATFORM_MACOS
+		create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+#endif
 #ifdef IMGUI_VULKAN_DEBUG_REPORT
 		// Enabling validation layers
 		const char* layers[] = { "VK_LAYER_KHRONOS_validation" };
@@ -136,6 +149,10 @@ static void SetupVulkan(const char** extensions, uint32_t extensions_count)
 		err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
 		check_vk_result(err);
 		IM_UNUSED(g_DebugReport);
+#endif
+
+#ifdef WL_PLATFORM_MACOS
+		free(extensions_portability);
 #endif
 	}
 
