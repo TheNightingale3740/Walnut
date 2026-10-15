@@ -56,20 +56,11 @@ project "Walnut-Networking"
 
       buildoptions (FmtConstevalWorkaround)
 
-      libdirs
-      {
-         "vendor/GameNetworkingSockets/bin/MacOS",
-         HomebrewPrefix .. "/lib",
-         OpenSSLPrefix .. "/lib"
-      }
+      libdirs (MacOSNetworkLibDirs)
       links { "GameNetworkingSockets_s" }
       links (MacOSNetworkLibraries)
       linkoptions (MacOSFrameworkLinkOptions)
-      linkoptions
-      {
-         "-Wl,-rpath," .. HomebrewPrefix .. "/lib",
-         "-Wl,-rpath," .. OpenSSLPrefix .. "/lib"
-      }
+      linkoptions (MacOSNetworkLinkOptions)
 
   filter { "system:windows", "configurations:Debug" }	
       links

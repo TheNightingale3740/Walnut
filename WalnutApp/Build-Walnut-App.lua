@@ -42,10 +42,7 @@ filter "system:macosx"
 
       -- ...same for the optional Walnut-Networking module, which is pulled in when
       -- the submodule is present. See Walnut-Modules/Walnut-Networking/Build-Walnut-Networking.lua.
-      libdirs
-      {
-         "../Walnut-Modules/Walnut-Networking/vendor/GameNetworkingSockets/bin/MacOS"
-      }
+      libdirs (MacOSNetworkLibDirs)
       links { "GameNetworkingSockets_s" }
       links (MacOSNetworkLibraries)
 

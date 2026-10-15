@@ -32,6 +32,8 @@ project "Walnut-Headless"
    targetdir ("../bin/" .. outputdir .. "/%{prj.name}")
    objdir ("../bin-int/" .. outputdir .. "/%{prj.name}")
 
+   buildoptions (FmtConstevalWorkaround)
+
    filter "system:windows"
       systemversion "latest"
       defines { "WL_PLATFORM_WINDOWS" }
@@ -41,7 +43,11 @@ project "Walnut-Headless"
       systemversion "latest"
       defines { "WL_PLATFORM_LINUX" }
 
-      filter "configurations:Debug"
+   filter "system:macosx"
+      pic "On"
+      defines { "WL_PLATFORM_MACOS" }
+
+   filter "configurations:Debug"
       defines { "WL_DEBUG" }
       runtime "Debug"
       symbols "On"
